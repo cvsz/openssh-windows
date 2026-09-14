@@ -1,26 +1,24 @@
 SHELL := /bin/sh
 
-.PHONY: help setup format lint test build security ci
+.PHONY: help setup test lint security ci
 
 help:
-	@printf '%s\n' 'Targets: setup format lint test build security ci'
+	@printf '%s\n' 'Targets: setup test lint security ci'
 
 setup:
-	@echo 'Replace with project bootstrap command.'
-
-format:
-	@echo 'Replace with project formatter command.'
-
-lint:
-	@echo 'Replace with project lint command.'
+	python -m pip install pytest
 
 test:
-	@echo 'Replace with project test command.'
+	python -m pytest -q
 
-build:
-	@echo 'Replace with project build command.'
+lint:
+	@grep -q '#requires -Version 7.0' install-openssh.ps1
+	@grep -q 'Format-List | Out-Host' install-openssh.ps1
 
 security:
-	@echo 'Use repository security workflows and add stack-specific scanners.'
+	@if git ls-files | grep -E '(^|/)(\.env|id_rsa|id_ed25519|.*\.pem|.*\.key)$$' | grep -v '^\.env\.example$$'; then \
+		echo 'Potential secret-bearing file is tracked.'; \
+		exit 1; \
+	fi
 
-ci: lint test build security
+ci: test lint security
