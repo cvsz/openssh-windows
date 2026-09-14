@@ -1,29 +1,29 @@
 # Security Policy
 
-Security is part of the default delivery baseline for repositories created from this template.
+Security is part of the delivery baseline for `cvsz/openssh-windows` because this project changes authentication, service, firewall, and SSH configuration on Windows hosts.
 
 ## Reporting a vulnerability
 
-Do not disclose exploitable vulnerabilities in public issues, pull requests, discussions, or commit messages. Use GitHub's private vulnerability reporting/security advisory capability when enabled for the repository, or contact the repository owner through an agreed private channel.
+Do not disclose exploitable vulnerabilities in public issues, pull requests, discussions, or commit messages. Use GitHub private vulnerability reporting/security advisories for this repository when available.
 
-Include affected versions or commits, reproduction details, impact, prerequisites, and suggested remediation when available.
+Include the affected installer version or commit, Windows build, PowerShell version, reproduction steps, impact, prerequisites, and suggested remediation when known.
 
 ## Supported versions
 
-Each generated project should replace this section with its real support policy before its first production release.
+Security fixes are supported on the current `main` branch and the latest published release. Older installer snapshots may be superseded by later Windows compatibility fixes.
 
 ## Security expectations
 
-- Keep dependencies patched and review Dependabot alerts.
-- Keep CodeQL and dependency-review workflows enabled when supported.
-- Use least-privilege GitHub Actions permissions.
-- Never commit credentials, tokens, private keys, production secrets, or sensitive personal data.
-- Validate untrusted input and enforce authorization at trust boundaries.
-- Prefer fail-closed behavior for security-sensitive paths.
-- Preserve tenant and data isolation where applicable.
-- Review third-party actions and pin or constrain them according to project policy.
-- Do not disable security gates merely to obtain a passing build.
+- never commit credentials, tokens, private keys, generated host keys, or machine-specific secrets;
+- do not permanently weaken PowerShell execution policy;
+- validate generated `sshd_config` before activation;
+- keep password-based SSH access opt-in rather than default;
+- default inbound firewall scope to trusted profiles and the local subnet;
+- preserve backups before managed configuration changes;
+- treat remote public-key deployment as public-key-only transfer;
+- keep GitHub Actions permissions least-privilege;
+- fix CI/security failures rather than disabling the gates.
 
 ## Incident handling
 
-Projects generated from this template should document containment, remediation, validation, disclosure, and rollback procedures appropriate to their risk profile.
+For an installer security regression, stop distributing the affected release, identify the last known-good commit, review host backups and health reports, publish a corrective release, and document any operator action required to restore the intended SSH/firewall policy.
