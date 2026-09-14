@@ -50,6 +50,7 @@ def test_capability_servicing_avoids_ps7_dism_cmdlets_directly():
     assert "Invoke-WindowsPowerShellCapability" in t
     assert "powershell.exe" in t
     assert "dism.exe" in t
+    # The production capability functions should route through the compatibility helper.
     start = t.index("function Get-CapabilityState")
     end = t.index("function Backup-OpenSshState")
     block = t[start:end]
@@ -62,6 +63,8 @@ def test_sshd_directive_editor_accepts_blank_lines():
     start = t.index('function Set-GlobalSshdDirective')
     end = t.index('function Test-SshdConfigFile')
     block = t[start:end]
+    # sshd_config legitimately contains blank lines; binding the List[string]
+    # as Mandatory causes PowerShell to reject collections containing ''.
     assert '[Parameter(Mandatory)][System.Collections.Generic.List[string]]$Lines' not in block
 
 def test_firewall_update_uses_supported_set_netfirewallrule_parameters():
@@ -69,6 +72,8 @@ def test_firewall_update_uses_supported_set_netfirewallrule_parameters():
     start = t.index('function Ensure-FirewallRule')
     end = t.index('function Remove-ManagedFirewallRule')
     block = t[start:end]
+    # AssociatedNetFirewallRule is a retrieval parameter on Get-* filter cmdlets,
+    # not a supported parameter on Set-NetFirewallAddressFilter/Set-NetFirewallPortFilter.
     assert 'Set-NetFirewallAddressFilter -AssociatedNetFirewallRule' not in block
     assert 'Set-NetFirewallPortFilter -AssociatedNetFirewallRule' not in block
     assert 'Set-NetFirewallRule -Name $Script:FirewallRuleName' in block
@@ -81,10 +86,15 @@ def test_firewall_health_query_uses_pipeline_compatibility_form():
     start = t.index('function Test-OpenSshHealth')
     end = t.index('function Export-HealthReport')
     block = t[start:end]
+    # Some Windows/NetSecurity combinations reject the explicit
+    # -AssociatedNetFirewallRule binding even though the docs expose it.
+    # Piping the rule object is the native and broadly compatible form.
     assert 'Get-NetFirewallPortFilter -AssociatedNetFirewallRule' not in block
     assert 'Get-NetFirewallAddressFilter -AssociatedNetFirewallRule' not in block
     assert '$fw | Get-NetFirewallPortFilter' in block
     assert '$fw | Get-NetFirewallAddressFilter' in block
+
+
 
 def test_health_report_does_not_pollute_success_pipeline():
     t = text()
