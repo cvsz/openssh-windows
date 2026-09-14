@@ -1,49 +1,38 @@
-# Environment and secrets
-.env
-.env.*
-!.env.example
-*.pem
-*.key
-
-# Dependencies
-node_modules/
-.venv/
-venv/
+# Python test/tool caches
 __pycache__/
 *.py[cod]
-
-# Build output
-dist/
-build/
-coverage/
-.next/
-.nuxt/
-.out/
-
-# Tool caches
-.cache/
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.eslintcache
+.venv/
+venv/
 
-# IDE / OS
-.DS_Store
-Thumbs.db
-.idea/
+# PowerShell/local tooling
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+.idea/
 
-# Logs
+# Logs and reports
 *.log
 logs/
+reports/
+coverage/
 
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.*
-
-# Local runtime data
+# Local runtime scratch
 .tmp/
 tmp/
+
+# Environment and credentials
+.env
+.env.*
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+id_ed25519_*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
