@@ -1,31 +1,22 @@
 # Roadmap
 
-This template is intended to stay generic while providing production-grade repository foundations.
+## Current state
 
-## Foundation
+The core Windows OpenSSH installation, repair, hardening, ZeaZ client configuration, and health-report flow is implemented and has completed successfully in live Windows validation.
 
-- [x] Repository documentation baseline
-- [x] Security and contribution policies
-- [x] Issue and pull request templates
-- [x] CI and security workflow baseline
-- [x] Dependabot configuration
-- [x] Release workflow
-- [x] Docker and task-runner placeholders
-- [x] Architecture and development documentation structure
+## Next bounded improvements
 
-## Future optional modules
+- add a disposable Windows integration-test harness so CI can validate service/firewall behavior without mutating developer machines
+- test additional Windows 11 patch levels and PowerShell 7 releases
+- add regression coverage for network profile transitions (`Public` vs `Private` / `Domain`)
+- allow host inventory overrides without editing source
+- package release ZIPs and SHA-256 checksums in GitHub Actions
+- add signed-release guidance without requiring signing for local development
+- document offline Features on Demand installation using matching Windows media
 
-- [ ] Language-specific starter packs
-- [ ] Infrastructure-as-code starter packs
-- [ ] Kubernetes and Helm starter packs
-- [ ] SBOM and provenance workflows
-- [ ] Release signing and artifact attestation
-- [ ] OpenSSF Scorecard workflow
-- [ ] Container vulnerability scanning
-- [ ] Documentation site starter
-- [ ] Monorepo profile
-- [ ] Service/API profile
-- [ ] Web application profile
-- [ ] Library/SDK profile
+## Non-goals
 
-Generated repositories should adopt only the modules appropriate to their stack and threat model.
+- embedding passwords or private keys
+- disabling Windows security controls globally
+- permanently changing PowerShell execution policy
+- opening SSH to unrestricted network scope by default
